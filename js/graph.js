@@ -210,7 +210,7 @@
       var duration = msg.duration/1000 || msg.durationms; // hack until we all migrate
       timelineRequestItem = {
         "content": title,
-        "group": referrer || "unknown",
+        "group": msg.requestServiceName || referrer || "unknown",
         "start": new Date(when - duration),
         "end": new Date(when),
         "msg": msg,

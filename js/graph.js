@@ -223,9 +223,30 @@
     return timelineRequestItem;
   }
 
+  function flattenObject(object) {
+    var result = {};
+
+    function flattenObjectLevel(current, prefix) {
+      Object.keys(current).forEach(function(key) {
+        var value = current[key];
+        var newKey = prefix + key;
+        if (typeof value === "object") {
+          flattenObjectLevel(value, newKey + '.');
+        } else {
+          result[newKey] = value;
+        }
+      });
+    }
+
+    flattenObjectLevel(object, '');
+
+    return result;
+  }
+
   function showMessage(msg) {
     if (msg) {
       var text = "";
+      msg = flattenObject(msg);
       Object.keys(msg).forEach(function(key) {
         var value = msg[key];
         if (typeof value === "object") {

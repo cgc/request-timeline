@@ -223,17 +223,26 @@
     return timelineRequestItem;
   }
 
+  var messageTemplate = Hogan.compile("" +
+    '{{#object}}' +
+    '<span class="jk">"{{key}}"</span><span class="jc">: </span><span class="jv">"{{value}}"</span><br/>' +
+    '{{/object}}'
+  );
+
   function showMessage(msg) {
     if (msg) {
       var text = "";
-      Object.keys(msg).forEach(function(key) {
+      var messageForRendering = Object.keys(msg).map(function(key) {
         var value = msg[key];
         if (typeof value === "object") {
           value = JSON.stringify(value);
         }
-        text += "<span class=\"jk\">\"" + key + "\"</span><span class=\"jc\">: </span><span class=\"jv\">\"" + value + "\"</span><br/>";
+        return {
+          key: key,
+          value: value
+        };
       });
-      $('#myModal .modal-body').html(text);
+      $('#myModal .modal-body').html(messageTemplate.render({object: messageForRendering}));
       $('#myModal').modal('show');
     }
   }
